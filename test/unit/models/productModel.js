@@ -2,23 +2,11 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const connection = require('../../../models/connection');
 const productModel = require('../../../models/productModel');
+const fakeData = require('../../../data/fakeDataTests');
 
-const fakeAllProducts = [
-  {
-    id: 1,
-    name: "produto A",
-    quantity: 10
-  },
-  {
-    id: 2,
-    name: "produto B",
-    quantity: 20
-  }
-];
-
-describe('Função getAll em MODELS', () => {
+describe('Função getAll em ProductModel', () => {
   before(() => {
-    sinon.stub(connection, 'execute').resolves([fakeAllProducts]);
+    sinon.stub(connection, 'execute').resolves([fakeData.allProducts]);
   })
 
   after(() => {
@@ -27,6 +15,42 @@ describe('Função getAll em MODELS', () => {
 
   it('Retorna lista de todos os produtos', async () => {
     const resultgetAll = await productModel.getAll();
-    expect(resultgetAll).to.be.equal(fakeAllProducts);
+    expect(resultgetAll).to.be.equal(fakeData.allProducts);
   })
+});
+
+describe('Função getById em ProductModel caso encontre o produto', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([fakeData.product]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('Retorna um objeto', async () => {
+    const resultgetById = await productModel.getById(1);
+    expect(resultgetById).to.be.a('object');
+  })
+
+  it('Retorna o objeto correto', async () => {
+    const resultgetById = await productModel.getById(1);
+    expect(resultgetById).to.have.own.property('id', 1);
+  })
+})
+
+describe('Função getById em ProductModel caso não encontre o produto', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{}]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('Retorna um objeto vazio', async () => {
+    const resultgetById = await productModel.getById(22);
+    expect(resultgetById).to.be.empty;
+  })
+
 })
