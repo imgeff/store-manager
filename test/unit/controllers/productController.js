@@ -3,6 +3,7 @@ const { expect } = require('chai');
 const productService = require('../../../services/productService');
 const productController = require('../../../controllers/productController');
 const fakeData = require('../../../data/fakeDataTests');
+const { notFound } = require('../../../data/errorMessage');
 
 const request = {}
 const response = {}
@@ -31,44 +32,47 @@ describe('Função getAll em ProductController', () => {
 
 // ===================== GET BY ID SUCESS ===================
 
-// describe('Função getById em ProductService caso encontre o produto', () => {
-//   before(() => {
-//     sinon.stub(productModel, 'getById').resolves(fakeData.product);
-//   })
+describe('Função getById em ProductController caso encontre o produto', () => {
+  before(() => {
+    request.params = { id: 1 }
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(productService, 'getById').resolves({ code: 200, content: fakeData.product });
+  })
 
-//   after(() => {
-//     productModel.getById.restore();
-//   })
+  after(() => {
+    productService.getById.restore();
+  })
 
-//   it('Retorna um objeto com as chaves code e content', async () => {
-//     const resultgetById = await productService.getById(1);
-//     expect(resultgetById).to.have.property('code');
-//     expect(resultgetById).to.have.property('content');
-//   })
-
-//   it('Retorna o objeto correto', async () => {
-//     const resultgetById = await productService.getById(1);
-//     expect(resultgetById).to.have.own.property('code', 200);
-//     expect(resultgetById).to.have.own.property('content', fakeData.product);
-//   })
-// })
+  it('Retorna uma resposta com status 200 e o produto encontrado', async () => {
+    await productController.getById(request, response);
+    expect(response.status.calledWith(200)).to.be.true;
+    expect(response.json.calledWith(fakeData.product)).to.be.true;
+  })
+})
 
 // ===================== GET BY ID FAIL ===================
 
-// describe('Função getById em ProductService caso não encontre o produto', () => {
-//   before(() => {
-//     sinon.stub(productModel, 'getById').resolves({});
-//   })
+describe('Função getById em ProductController caso não encontre o produto', () => {
+  before(() => {
+    request.params = { id: 2 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(productService, 'getById').resolves({ code: 404, content: notFound });
+  })
 
-//   after(() => {
-//     productModel.getById.restore();
-//   })
+  after(() => {
+    productService.getById.restore();
+  })
 
-//   it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
-//     const resultgetById = await productService.getById(22);
-//     const notFound = { message: 'Product not found' };
-//     expect(resultgetById.code).to.be.equal(404);
-//     expect(resultgetById.content).to.be.deep.equal(notFound);
-//   })
+  it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
+    await productController.getById(request, response);
+    expect(response.status.calledWith(404)).to.be.true;
+    expect(response.json.calledWith(notFound)).to.be.true;
+  })
 
-// })
+})

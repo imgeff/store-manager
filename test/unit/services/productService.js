@@ -3,6 +3,7 @@ const { expect } = require('chai');
 const productModel = require('../../../models/productModel');
 const productService = require('../../../services/productService');
 const fakeData = require('../../../data/fakeDataTests');
+const { notFound } = require('../../../data/errorMessage');
 
 // ===================== GET ALL ===================
 
@@ -58,7 +59,6 @@ describe('Função getById em ProductService caso não encontre o produto', () =
 
   it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
     const resultgetById = await productService.getById(22);
-    const notFound = { message: 'Product not found' };
     expect(resultgetById.code).to.be.equal(404);
     expect(resultgetById.content).to.be.deep.equal(notFound);
   })

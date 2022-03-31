@@ -5,13 +5,14 @@ const getAll = async (_req, res) => {
   return res.status(200).json(resultgetAll);
 };
 
-// const getById = async (id) => {
-//   const resultgetById = await productModel.getById(id);
-//   if (!resultgetById.id) return { code: 404, content: { message: 'Product not found' } };
-//   return { code: 200, content: resultgetById };
-// };
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const { code, content } = await productService.getById(id);
+
+  return res.status(code).json(content);
+};
 
 module.exports = {
   getAll,
-  // getById,
+  getById,
 };
