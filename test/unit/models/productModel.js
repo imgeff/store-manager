@@ -21,7 +21,7 @@ describe('Função getAll em ProductModel', () => {
 
 describe('Função getById em ProductModel caso encontre o produto', () => {
   before(() => {
-    sinon.stub(connection, 'execute').resolves([fakeData.product]);
+    sinon.stub(connection, 'execute').resolves([[fakeData.product]]);
   })
 
   after(() => {
@@ -41,7 +41,7 @@ describe('Função getById em ProductModel caso encontre o produto', () => {
 
 describe('Função getById em ProductModel caso não encontre o produto', () => {
   before(() => {
-    sinon.stub(connection, 'execute').resolves([{}]);
+    sinon.stub(connection, 'execute').resolves([[{}]]);
   })
 
   after(() => {
