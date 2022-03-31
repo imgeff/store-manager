@@ -32,47 +32,47 @@ describe('Função getAll em saleController', () => {
 
 // ===================== GET BY ID SUCESS ===================
 
-// describe('Função getById em ProductController caso encontre o produto', () => {
-//   before(() => {
-//     request.params = { id: 1 }
-//     response.status = sinon.stub()
-//       .returns(response);
-//     response.json = sinon.stub()
-//       .returns();
-//     sinon.stub(productService, 'getById').resolves({ code: 200, content: fakeData.product });
-//   })
+describe('Função getById em saleController caso encontre o produto', () => {
+  before(() => {
+    request.params = { id: 1 }
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(saleService, 'getById').resolves({ code: 200, content: fakeData.saleForId });
+  })
 
-//   after(() => {
-//     productService.getById.restore();
-//   })
+  after(() => {
+    saleService.getById.restore();
+  })
 
-//   it('Retorna uma resposta com status 200 e o produto encontrado', async () => {
-//     await productController.getById(request, response);
-//     expect(response.status.calledWith(200)).to.be.true;
-//     expect(response.json.calledWith(fakeData.product)).to.be.true;
-//   })
-// })
+  it('Retorna uma resposta com status 200 e as vendas encontradas', async () => {
+    await saleController.getById(request, response);
+    expect(response.status.calledWith(200)).to.be.true;
+    expect(response.json.calledWith(fakeData.saleForId)).to.be.true;
+  })
+})
 
 // ===================== GET BY ID FAIL ===================
 
-// describe('Função getById em ProductController caso não encontre o produto', () => {
-//   before(() => {
-//     request.params = { id: 2 };
-//     response.status = sinon.stub()
-//       .returns(response);
-//     response.json = sinon.stub()
-//       .returns();
-//     sinon.stub(productService, 'getById').resolves({ code: 404, content: notFound });
-//   })
+describe('Função getById em saleController caso não encontre o produto', () => {
+  before(() => {
+    request.params = { id: 2 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(saleService, 'getById').resolves({ code: 404, content: notFound('Sale') });
+  })
 
-//   after(() => {
-//     productService.getById.restore();
-//   })
+  after(() => {
+    saleService.getById.restore();
+  })
 
-//   it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
-//     await productController.getById(request, response);
-//     expect(response.status.calledWith(404)).to.be.true;
-//     expect(response.json.calledWith(notFound)).to.be.true;
-//   })
+  it('Retorna um objeto com code 404 e content { message: "Sale not found" }', async () => {
+    await saleController.getById(request, response);
+    expect(response.status.calledWith(404)).to.be.true;
+    expect(response.json.calledWith(notFound('Sale'))).to.be.true;
+  })
 
-// })
+})
