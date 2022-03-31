@@ -2,7 +2,7 @@ const connection = require('./connection');
 
 const getAll = async () => {
   const queryGetAll = `
-  SELECT SP.sale_id, SP.product_id, SP.quantity, S.date
+  SELECT SP.sale_id AS saleId, SP.product_id AS productId, SP.quantity, S.date
   FROM StoreManager.sales_products SP
   INNER JOIN StoreManager.sales S
   ON S.id = SP.sale_id
@@ -14,7 +14,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
   const queryGetById = `
-  SELECT SP.product_id, SP.quantity, S.date
+  SELECT SP.product_id AS productId, SP.quantity, S.date
   FROM StoreManager.sales_products SP
   INNER JOIN StoreManager.sales S
   ON S.id = SP.sale_id

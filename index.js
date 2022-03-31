@@ -10,8 +10,10 @@ app.get('/', (_request, response) => {
 });
 
 app.use(express.json());
-app.use('/products', productRoutes);
+
 app.use('/sales', saleRoutes);
+
+app.use('/products', productRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
