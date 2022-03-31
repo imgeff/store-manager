@@ -54,3 +54,19 @@ describe('Função getById em ProductModel caso não encontre o produto', () => 
   })
 
 })
+
+describe('Função create em ProductModel', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('Retorna o objeto criado', async () => {
+    const resultcreate = await productModel.create(fakeData.newProduct);
+    expect(resultcreate).to.be.deep.equal({ id: 4, ...fakeData.newProduct });
+  })
+
+})

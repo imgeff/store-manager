@@ -10,10 +10,19 @@ const getAll = async () => {
 const getById = async (id) => {
   const queryGetById = 'SELECT * FROM StoreManager.products WHERE id = ?;';
   const [productById] = await connection.execute(queryGetById, [id]);
+
   return productById[0];
+};
+
+const create = async ({ name, quantity }) => {
+  const queryCreate = 'INSERT INTO StoreManager.products(name, quantity) VALUES(?, ?)';
+  const [{ insertId }] = await connection.execute(queryCreate, [name, quantity]);
+
+  return { id: insertId, name, quantity };
 };
 
 module.exports = {
   getAll,
   getById,
+  create,
 };
