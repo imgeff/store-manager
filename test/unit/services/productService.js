@@ -4,6 +4,8 @@ const productModel = require('../../../models/productModel');
 const productService = require('../../../services/productService');
 const fakeData = require('../../../data/fakeDataTests');
 
+// ===================== GET ALL ===================
+
 describe('Função getAll em ProductService', () => {
   before(() => {
     sinon.stub(productModel, 'getAll').resolves(fakeData.allProducts);
@@ -19,38 +21,46 @@ describe('Função getAll em ProductService', () => {
   })
 });
 
-// describe('Função getById em ProductModel caso encontre o produto', () => {
-//   before(() => {
-//     sinon.stub(connection, 'execute').resolves([fakeData.product]);
-//   })
+// ===================== GET BY ID SUCESS ===================
 
-//   after(() => {
-//     connection.execute.restore();
-//   })
+describe('Função getById em ProductService caso encontre o produto', () => {
+  before(() => {
+    sinon.stub(productModel, 'getById').resolves(fakeData.product);
+  })
 
-//   it('Retorna um objeto', async () => {
-//     const resultgetById = await productModel.getById(1);
-//     expect(resultgetById).to.be.a('object');
-//   })
+  after(() => {
+    productModel.getById.restore();
+  })
 
-//   it('Retorna o objeto correto', async () => {
-//     const resultgetById = await productModel.getById(1);
-//     expect(resultgetById).to.have.own.property('id', 1);
-//   })
-// })
+  it('Retorna um objeto com as chaves code e content', async () => {
+    const resultgetById = await productService.getById(1);
+    expect(resultgetById).to.have.property('code');
+    expect(resultgetById).to.have.property('content');
+  })
 
-// describe('Função getById em ProductModel caso não encontre o produto', () => {
-//   before(() => {
-//     sinon.stub(connection, 'execute').resolves([{}]);
-//   })
+  it('Retorna o objeto correto', async () => {
+    const resultgetById = await productService.getById(1);
+    expect(resultgetById).to.have.own.property('code', 200);
+    expect(resultgetById).to.have.own.property('content', fakeData.product);
+  })
+})
 
-//   after(() => {
-//     connection.execute.restore();
-//   })
+// ===================== GET BY ID FAIL ===================
 
-//   it('Retorna um objeto vazio', async () => {
-//     const resultgetById = await productModel.getById(22);
-//     expect(resultgetById).to.be.empty;
-//   })
+describe('Função getById em ProductService caso não encontre o produto', () => {
+  before(() => {
+    sinon.stub(productModel, 'getById').resolves({});
+  })
 
-// })
+  after(() => {
+    productModel.getById.restore();
+  })
+
+  it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
+    const resultgetById = await productService.getById(22);
+    const notFound = { message: 'Product not found' };
+    expect(resultgetById.code).to.be.equal(404);
+    expect(resultgetById.content).to.be.deep.equal(notFound);
+  })
+
+})
