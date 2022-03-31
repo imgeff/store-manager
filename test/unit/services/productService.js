@@ -50,7 +50,7 @@ describe('Função getById em ProductService caso encontre o produto', () => {
 
 describe('Função getById em ProductService caso não encontre o produto', () => {
   before(() => {
-    sinon.stub(productModel, 'getById').resolves({});
+    sinon.stub(productModel, 'getById').resolves(undefined);
   })
 
   after(() => {
