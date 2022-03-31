@@ -1,4 +1,4 @@
-const notFound = { message: 'Product not found' };
+const notFound = (value) => ({ message: `${value} not found` });
 
 module.exports = {
   notFound,

@@ -1,4 +1,5 @@
 const productModel = require('../models/productModel');
+const { notFound } = require('../data/errorMessage');
 
 const getAll = async () => {
  const resultgetAll = await productModel.getAll();
@@ -7,7 +8,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
   const resultgetById = await productModel.getById(id);
-  if (resultgetById === undefined) return { code: 404, content: { message: 'Product not found' } };
+  if (resultgetById === undefined) return { code: 404, content: notFound('Product') };
   return { code: 200, content: resultgetById };
 };
 

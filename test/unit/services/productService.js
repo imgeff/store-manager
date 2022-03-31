@@ -60,7 +60,7 @@ describe('Função getById em ProductService caso não encontre o produto', () =
   it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
     const resultgetById = await productService.getById(22);
     expect(resultgetById.code).to.be.equal(404);
-    expect(resultgetById.content).to.be.deep.equal(notFound);
+    expect(resultgetById.content).to.be.deep.equal(notFound('Product'));
   })
 
 })

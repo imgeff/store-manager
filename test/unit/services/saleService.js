@@ -24,43 +24,43 @@ describe('Função getAll em saleService', () => {
 
 // ===================== GET BY ID SUCESS ===================
 
-// describe('Função getById em ProductService caso encontre o produto', () => {
-//   before(() => {
-//     sinon.stub(productModel, 'getById').resolves(fakeData.product);
-//   })
+describe('Função getById em saleService caso encontre o produto', () => {
+  before(() => {
+    sinon.stub(saleModel, 'getById').resolves(fakeData.saleForId);
+  })
 
-//   after(() => {
-//     productModel.getById.restore();
-//   })
+  after(() => {
+    saleModel.getById.restore();
+  })
 
-//   it('Retorna um objeto com as chaves code e content', async () => {
-//     const resultgetById = await productService.getById(1);
-//     expect(resultgetById).to.have.property('code');
-//     expect(resultgetById).to.have.property('content');
-//   })
+  it('Retorna um objeto com as chaves code e content', async () => {
+    const resultgetById = await saleService.getById(1);
+    expect(resultgetById).to.have.property('code');
+    expect(resultgetById).to.have.property('content');
+  })
 
-//   it('Retorna o objeto correto', async () => {
-//     const resultgetById = await productService.getById(1);
-//     expect(resultgetById).to.have.own.property('code', 200);
-//     expect(resultgetById).to.have.own.property('content', fakeData.product);
-//   })
-// })
+  it('Retorna o objeto correto', async () => {
+    const resultgetById = await saleService.getById(1);
+    expect(resultgetById).to.have.own.property('code', 200);
+    expect(resultgetById).to.have.own.property('content', fakeData.saleForId);
+  })
+})
 
 // ===================== GET BY ID FAIL ===================
 
-// describe('Função getById em ProductService caso não encontre o produto', () => {
-//   before(() => {
-//     sinon.stub(productModel, 'getById').resolves(undefined);
-//   })
+describe('Função getById em saleService caso não encontre o produto', () => {
+  before(() => {
+    sinon.stub(saleModel, 'getById').resolves([]);
+  })
 
-//   after(() => {
-//     productModel.getById.restore();
-//   })
+  after(() => {
+    saleModel.getById.restore();
+  })
 
-//   it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
-//     const resultgetById = await productService.getById(22);
-//     expect(resultgetById.code).to.be.equal(404);
-//     expect(resultgetById.content).to.be.deep.equal(notFound);
-//   })
+  it('Retorna um objeto com code 404 e content { message: "Sale not found" }', async () => {
+    const resultgetById = await saleService.getById(22);
+    expect(resultgetById.code).to.be.equal(404);
+    expect(resultgetById.content).to.be.deep.equal(notFound('Sale'));
+  })
 
-// })
+})
