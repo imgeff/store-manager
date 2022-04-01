@@ -76,3 +76,51 @@ describe('Função getById em saleController caso não encontre o produto', () =
   })
 
 })
+
+// ===================== DELETE CASO ENCONTRE A VENDA ===================
+
+describe('Função exclude em saleController caso encontre a venda', () => {
+  before(() => {
+    request.params = { id: 4 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(saleService, 'exclude').resolves({ code: 204, content: undefined });
+  })
+
+  after(() => {
+    saleService.exclude.restore();
+  })
+
+  it('Retorna uma resposta com status 204 sem corpo', async () => {
+    await saleController.exclude(request, response);
+    expect(response.status.calledWith(204)).to.be.true;
+    expect(response.json.calledWith(undefined)).to.be.true;
+  })
+
+})
+
+// ===================== DELETE CASO NÃO ENCONTRE O PRODUTO ===================
+
+describe('Função exclude em saleController caso não encontre a venda', () => {
+  before(() => {
+    request.params = { id: 5 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(saleService, 'exclude').resolves({ code: 404, content: { message: 'Product not found' } });
+  })
+
+  after(() => {
+    saleService.exclude.restore();
+  })
+
+  it('Retorna uma resposta com status 404 e a mensagem de erro', async () => {
+    await saleController.exclude(request, response);
+    expect(response.status.calledWith(404)).to.be.true;
+    expect(response.json.calledWith({ message: 'Product not found' })).to.be.true;
+  })
+
+})
