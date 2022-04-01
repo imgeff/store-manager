@@ -64,7 +64,7 @@ describe('Função create em ProductModel', () => {
     connection.execute.restore();
   })
 
-  it('Retorna o objeto criado', async () => {
+  it('Retorna o produto criado', async () => {
     const resultcreate = await productModel.create(fakeData.newProduct);
     expect(resultcreate).to.be.deep.equal({ id: 4, ...fakeData.newProduct });
   })

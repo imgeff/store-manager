@@ -62,3 +62,20 @@ describe('Função getById em saleModel caso não encontre o produto', () => {
   })
 
 })
+
+// ===================== CREATE ===================
+
+describe('Função create em saleModel', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 3 }]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('Retorna a venda criada', async () => {
+    const resultcreate = await saleModel.create(fakeData.newSale);
+    expect(resultcreate).to.be.deep.equal({ saleId: 3, ...fakeData.newSale });
+  })
+})

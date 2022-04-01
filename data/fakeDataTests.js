@@ -1,18 +1,7 @@
-const allProducts = [
-  {
-    id: 1,
-    name: 'produto A',
-    quantity: 10,
-  },
-  {
-    id: 2,
-    name: 'produto B',
-    quantity: 20,
-  },
-];
-
+// ===================== CREATE ===================
 const newProduct = { name: 'produto', quantity: 10 };
-
+const newSale = { productId: 'produto', quantity: 35 };
+// ===================== GET ALL ===================
 const date = '2022-03-30 15:22:38';
 const allSales = [
   {
@@ -35,6 +24,19 @@ const allSales = [
   },
 ];
 
+const allProducts = [
+  {
+    id: 1,
+    name: 'produto A',
+    quantity: 10,
+  },
+  {
+    id: 2,
+    name: 'produto B',
+    quantity: 20,
+  },
+];
+// ===================== GET BY ID ===================
 const saleForId = [
   {
     date: '2022-03-30 15:22:38',
@@ -58,6 +60,7 @@ module.exports = {
   product,
   newProduct,
   allProducts,
+  newSale,
   allSales,
   saleForId,
 };
