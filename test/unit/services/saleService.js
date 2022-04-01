@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const saleModel = require('../../../models/saleModel');
 const saleService = require('../../../services/saleService');
+const search = require('../../../helpers/search')
 const fakeData = require('../../../data/fakeDataTests');
 const { notFound } = require('../../../data/errorMessage');
 
@@ -61,6 +62,46 @@ describe('Função getById em saleService caso não encontre o produto', () => {
     const resultgetById = await saleService.getById(22);
     expect(resultgetById.code).to.be.equal(404);
     expect(resultgetById.content).to.be.deep.equal(notFound('Sale'));
+  })
+
+})
+
+// ===================== DELETE CASO ENCONTRE A VENDA ===================
+
+describe('Função exclude em saleService quando encontra a venda', () => {
+  before(() => {
+    sinon.stub(saleModel, 'exclude').resolves(undefined);
+    sinon.stub(search, 'sales').resolves(true);
+  })
+
+  after(() => {
+    saleModel.exclude.restore();
+    search.sales.restore();
+  })
+
+  it('Retorna um objeto com code 204 e content com undefinned', async () => {
+    const resultDelete = await saleService.exclude(1);
+    expect(resultDelete.code).to.be.equal(204);
+    expect(resultDelete.content).to.be.undefined;
+  })
+
+})
+
+// ===================== DELETE CASO NÃO ENCONTRE A VENDA ===================
+
+describe('Função exclude em saleService quando não encontra a venda', () => {
+  before(() => {
+    sinon.stub(search, 'sales').resolves(false);
+  })
+
+  after(() => {
+    search.sales.restore();
+  })
+
+  it('Retorna um objeto com code 404 e content com { message: "Product not found" }', async () => {
+    const resultUpdate = await saleService.exclude(5);
+    expect(resultUpdate.code).to.be.equal(404);
+    expect(resultUpdate.content).to.be.deep.equal({ message: 'Product not found' });
   })
 
 })
