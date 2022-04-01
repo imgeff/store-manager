@@ -69,7 +69,7 @@ describe('Função getById em ProductController caso não encontre o produto', (
     productService.getById.restore();
   })
 
-  it('Retorna um objeto com code 404 e content { message: "Product not found" }', async () => {
+  it('Retorna um objeto com status 404 e content { message: "Product not found" }', async () => {
     await productController.getById(request, response);
     expect(response.status.calledWith(404)).to.be.true;
     expect(response.json.calledWith(notFound)).to.be.true;
@@ -94,7 +94,7 @@ describe('Função create em productController caso não tenha produto igual', (
     productService.create.restore();
   })
 
-  it('Retorna uma resposta com code 201 e o produto criado', async () => {
+  it('Retorna uma resposta com status 201 e o produto criado', async () => {
     await productController.create(request, response);
     expect(response.status.calledWith(201)).to.be.true;
     expect(response.json.calledWith({ id: 4, ...fakeData.newProduct })).to.be.true;
@@ -118,10 +118,60 @@ describe('Função create em productController caso tenha produto igual', () => 
     productService.create.restore();
   })
 
-  it('Retorna uma resposta com code 409 e mensagem de erro', async () => {
+  it('Retorna uma resposta com status 409 e mensagem de erro', async () => {
     await productController.create(request, response);
     expect(response.status.calledWith(409)).to.be.true;
     expect(response.json.calledWith({ message: 'Product already exists' })).to.be.true;
+  })
+
+})
+
+// ===================== UPDATE CASO ENCONTRE O PRODUTO===================
+
+describe('Função update em productController caso encontre o produto', () => {
+  before(() => {
+    request.params = { id: 4 };
+    request.body = { name: 'produtoAlterado', quantity: 15 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(productService, 'update').resolves({ code: 200, content: { id: 4, name: 'produtoAlterado', quantity: 15 } });
+  })
+
+  after(() => {
+    productService.update.restore();
+  })
+
+  it('Retorna uma resposta com status 200 e o produto atualizado', async () => {
+    await productController.update(request, response);
+    expect(response.status.calledWith(200)).to.be.true;
+    expect(response.json.calledWith({ id: 4, name: 'produtoAlterado', quantity: 15 })).to.be.true;
+  })
+
+})
+
+// ===================== UPDATE CASO NÃO ENCONTRE O PRODUTO ===================
+
+describe('Função update em productController caso não encontre o produto', () => {
+  before(() => {
+    request.params = { id: 5 };
+    request.body = { name: 'produtoAlterado', quantity: 15 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(productService, 'update').resolves({ code: 404, content: { message: 'Product not found' } });
+  })
+
+  after(() => {
+    productService.update.restore();
+  })
+
+  it('Retorna uma resposta com status 404 e a mensagem de erro', async () => {
+    await productController.update(request, response);
+    expect(response.status.calledWith(404)).to.be.true;
+    expect(response.json.calledWith({ message: 'Product not found' })).to.be.true;
   })
 
 })
