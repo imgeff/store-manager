@@ -98,10 +98,10 @@ describe('Função exclude em saleService quando não encontra a venda', () => {
     search.sales.restore();
   })
 
-  it('Retorna um objeto com code 404 e content com { message: "Product not found" }', async () => {
+  it('Retorna um objeto com code 404 e content com { message: "Sale not found" }', async () => {
     const resultUpdate = await saleService.exclude(5);
     expect(resultUpdate.code).to.be.equal(404);
-    expect(resultUpdate.content).to.be.deep.equal({ message: 'Product not found' });
+    expect(resultUpdate.content).to.be.deep.equal({ message: 'Sale not found' });
   })
 
 })

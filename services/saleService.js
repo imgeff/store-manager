@@ -15,7 +15,7 @@ const getById = async (id) => {
 
 const exclude = async (id) => {
   const resultSearch = await search.sales(false, id);
-  if (!resultSearch) return { code: 404, content: { message: 'Product not found' } };
+  if (!resultSearch) return { code: 404, content: { message: 'Sale not found' } };
   
   const resultDelete = await saleModel.exclude(id);
   return { code: 204, content: resultDelete };
