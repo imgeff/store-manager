@@ -145,3 +145,43 @@ describe('Função update em ProductService quando não encontra o produto', () 
   })
 
 })
+
+// ===================== DELETE CASO ENCONTRE O PRODUTO ===================
+
+describe('Função exclude em ProductService quando encontra o produto', () => {
+  before(() => {
+    sinon.stub(productModel, 'exclude').resolves(undefined);
+    sinon.stub(search, 'products').resolves(true);
+  })
+
+  after(() => {
+    productModel.exclude.restore();
+    search.products.restore();
+  })
+
+  it('Retorna um objeto com code 204 e content com undefinned', async () => {
+    const resultDelete = await productService.exclude(1);
+    expect(resultDelete.code).to.be.equal(204);
+    expect(resultDelete.content).to.be.undefined;
+  })
+
+})
+
+// ===================== DELETE CASO NÃO ENCONTRE O PRODUTO ===================
+
+describe('Função exclude em ProductService quando não encontra o produto', () => {
+  before(() => {
+    sinon.stub(search, 'products').resolves(false);
+  })
+
+  after(() => {
+    search.products.restore();
+  })
+
+  it('Retorna um objeto com code 404 e content com { message: "Product not found" }', async () => {
+    const resultUpdate = await productService.exclude(5);
+    expect(resultUpdate.code).to.be.equal(404);
+    expect(resultUpdate.content).to.be.deep.equal({ message: 'Product not found' });
+  })
+
+})
