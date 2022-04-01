@@ -4,6 +4,8 @@ const connection = require('../../../models/connection');
 const productModel = require('../../../models/productModel');
 const fakeData = require('../../../data/fakeDataTests');
 
+// ===================== GET ALL ===================
+
 describe('Função getAll em ProductModel', () => {
   before(() => {
     sinon.stub(connection, 'execute').resolves([fakeData.allProducts]);
@@ -18,6 +20,8 @@ describe('Função getAll em ProductModel', () => {
     expect(resultgetAll).to.be.equal(fakeData.allProducts);
   })
 });
+
+// ===================== GET BY ID ===================
 
 describe('Função getById em ProductModel caso encontre o produto', () => {
   before(() => {
@@ -55,6 +59,8 @@ describe('Função getById em ProductModel caso não encontre o produto', () => 
 
 })
 
+// ===================== CREATE ===================
+
 describe('Função create em ProductModel', () => {
   before(() => {
     sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
@@ -67,6 +73,24 @@ describe('Função create em ProductModel', () => {
   it('Retorna o produto criado', async () => {
     const resultcreate = await productModel.create(fakeData.newProduct);
     expect(resultcreate).to.be.deep.equal({ id: 4, ...fakeData.newProduct });
+  })
+
+})
+
+// ===================== UPDATE ===================
+
+describe('Função update em ProductModel', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('Retorna o produto atualizado', async () => {
+    const resultUpdate = await productModel.update({ id: 4, ...fakeData.newProduct });
+    expect(resultUpdate).to.be.deep.equal({ id: 4, ...fakeData.newProduct });
   })
 
 })
