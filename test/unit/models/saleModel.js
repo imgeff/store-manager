@@ -79,3 +79,21 @@ describe('Função create em saleModel', () => {
     expect(resultcreate).to.be.deep.equal({ saleId: 3, ...fakeData.newSale });
   })
 })
+
+// ===================== DELETE ===================
+
+describe('Função delete em saleModel', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 0 }]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('A função exclude retorna undefinned', async () => {
+    const resultDelete = await saleModel.exclude(4);
+    expect(resultDelete).to.be.undefined;
+  })
+
+})
