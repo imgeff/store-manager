@@ -76,3 +76,52 @@ describe('Função getById em ProductController caso não encontre o produto', (
   })
 
 })
+
+
+// ===================== CREATE CASO NÃO TENHA PRODUTO IGUAL===================
+
+describe('Função create em productController caso não tenha produto igual', () => {
+  before(() => {
+    request.body = { name: 'produto', quantity: 10 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(productService, 'create').resolves({ code: 201, content: { id: 4, ...fakeData.newProduct } });
+  })
+
+  after(() => {
+    productService.create.restore();
+  })
+
+  it('Retorna uma resposta com code 201 e o produto criado', async () => {
+    await productController.create(request, response);
+    expect(response.status.calledWith(201)).to.be.true;
+    expect(response.json.calledWith({ id: 4, ...fakeData.newProduct })).to.be.true;
+  })
+
+})
+
+// ===================== CREATE CASO TENHA PRODUTO IGUAL===================
+
+describe('Função create em productController caso tenha produto igual', () => {
+  before(() => {
+    request.body = { name: 'produto', quantity: 10 };
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(productService, 'create').resolves({ code: 409, content: { message: 'Product already exists' } });
+  })
+
+  after(() => {
+    productService.create.restore();
+  })
+
+  it('Retorna uma resposta com code 409 e mensagem de erro', async () => {
+    await productController.create(request, response);
+    expect(response.status.calledWith(409)).to.be.true;
+    expect(response.json.calledWith({ message: 'Product already exists' })).to.be.true;
+  })
+
+})
