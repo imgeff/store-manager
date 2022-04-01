@@ -12,8 +12,8 @@ const greatestValidate = Joi.object({
 const saleSchema = (fields) => {
   const { error: errRequired } = requiredValidate.validate(fields);
   const { error: errGreatest } = greatestValidate.validate({ quantity: fields.quantity });
-  if (errRequired) return { code: 400, content: errRequired.message };
-  if (errGreatest) return { code: 422, content: errGreatest.message };
+  if (errRequired) return { code: 400, content: { message: errRequired.message } };
+  if (errGreatest) return { code: 422, content: { message: errGreatest.message } };
   return false;
 };
 
