@@ -94,3 +94,21 @@ describe('Função update em ProductModel', () => {
   })
 
 })
+
+// ===================== DELETE ===================
+
+describe('Função delete em ProductModel', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 0 }]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('A função exclude retorna undefinned', async () => {
+    const resultDelete = await productModel.exclude(4);
+    expect(resultDelete).to.be.undefined;
+  })
+
+})
