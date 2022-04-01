@@ -1,4 +1,5 @@
 const productModel = require('../models/productModel');
+const verifyDuplicates = require('../helpers/verifyDuplicates');
 const { notFound } = require('../data/errorMessage');
 
 const getAll = async () => {
@@ -12,7 +13,15 @@ const getById = async (id) => {
   return { code: 200, content: resultgetById };
 };
 
+const create = async ({ name, quantity }) => {
+  const resultDuplicates = await verifyDuplicates.products(name);
+  if (resultDuplicates) return { code: 409, content: { message: 'Product already exists' } };
+  const resultcreate = await productModel.create({ name, quantity });
+  return { code: 201, content: resultcreate };
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };

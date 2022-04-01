@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const productModel = require('../../../models/productModel');
 const productService = require('../../../services/productService');
+const verifyDuplicates = require('../../../helpers/verifyDuplicates');
 const fakeData = require('../../../data/fakeDataTests');
 const { notFound } = require('../../../data/errorMessage');
 
@@ -61,6 +62,46 @@ describe('Função getById em ProductService caso não encontre o produto', () =
     const resultgetById = await productService.getById(22);
     expect(resultgetById.code).to.be.equal(404);
     expect(resultgetById.content).to.be.deep.equal(notFound('Product'));
+  })
+
+})
+
+// ===================== CREATE QUANDO NÃO HÁ OUTRO PRODUTO IGUAL===================
+
+describe('Função create em ProductService caso não tenha produto igual', () => {
+  before(() => {
+    sinon.stub(verifyDuplicates, 'products').resolves(false);
+    sinon.stub(productModel, 'create').resolves({ id: 4, ...fakeData.newProduct });
+  })
+
+  after(() => {
+    verifyDuplicates.products.restore();
+    productModel.create.restore()
+  })
+
+  it('Retorna um objeto com code 201 e content com o objeto criado', async () => {
+    const resultgetById = await productService.create(fakeData.newProduct);
+    expect(resultgetById.code).to.be.equal(201);
+    expect(resultgetById.content).to.be.deep.equal({ id: 4, ...fakeData.newProduct });
+  })
+
+})
+
+// ===================== CREATE QUANDO HÁ OUTRO PRODUTO IGUAL ===================
+
+describe('Função create em ProductService caso tenha produto igual', () => {
+  before(() => {
+    sinon.stub(verifyDuplicates, 'products').resolves(true);
+  })
+
+  after(() => {
+    verifyDuplicates.products.restore();
+  })
+
+  it('Retorna um objeto com code 409 e content com { message: "Product already exists" }', async () => {
+    const resultgetById = await productService.create(fakeData.newProduct);
+    expect(resultgetById.code).to.be.equal(409);
+    expect(resultgetById.content).to.be.deep.equal({ message: 'Product already exists' });
   })
 
 })
