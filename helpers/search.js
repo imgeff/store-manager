@@ -19,7 +19,7 @@ const sales = async (name, id) => {
     return resultSearch;
   }
 
-  const resultSearch = allSales.some((sale) => sale.id === id);
+  const resultSearch = allSales.some((sale) => sale.saleId === id);
   return resultSearch;
 };
 
