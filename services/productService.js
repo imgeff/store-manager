@@ -31,8 +31,8 @@ const exclude = async (id) => {
   const resultSearch = await search.products(false, id);
   if (!resultSearch) return { code: 404, content: { message: 'Product not found' } };
   
-  await productModel.exclude(id);
-  return { code: 204 };
+  const resultDelete = await productModel.exclude(id);
+  return { code: 204, content: resultDelete };
 };
 
 module.exports = {
