@@ -1,10 +1,16 @@
 const express = require('express');
-const saleController = require('../controllers/saleController');
+const { getAll, getById, exclude } = require('../controllers/saleController');
 
 const router = express.Router();
 
-router.get('/:id', saleController.getById);
+// ============== GET ===================
 
-router.get('/', saleController.getAll);
+router.get('/:id', getById);
+
+router.get('/', getAll);
+
+// ============== DELETE ===================
+
+router.delete('/:id', exclude);
 
 module.exports = router;
