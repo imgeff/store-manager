@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const { expect } = require('chai');
 const productModel = require('../../../models/productModel');
 const productService = require('../../../services/productService');
-const verifyDuplicates = require('../../../helpers/verifyDuplicates');
+const search = require('../../../helpers/search');
 const fakeData = require('../../../data/fakeDataTests');
 const { notFound } = require('../../../data/errorMessage');
 
@@ -70,12 +70,12 @@ describe('Função getById em ProductService caso não encontre o produto', () =
 
 describe('Função create em ProductService caso não tenha produto igual', () => {
   before(() => {
-    sinon.stub(verifyDuplicates, 'products').resolves(false);
+    sinon.stub(search, 'products').resolves(false);
     sinon.stub(productModel, 'create').resolves({ id: 4, ...fakeData.newProduct });
   })
 
   after(() => {
-    verifyDuplicates.products.restore();
+    search.products.restore();
     productModel.create.restore()
   })
 
@@ -91,17 +91,57 @@ describe('Função create em ProductService caso não tenha produto igual', () =
 
 describe('Função create em ProductService caso tenha produto igual', () => {
   before(() => {
-    sinon.stub(verifyDuplicates, 'products').resolves(true);
+    sinon.stub(search, 'products').resolves(true);
   })
 
   after(() => {
-    verifyDuplicates.products.restore();
+    search.products.restore();
   })
 
   it('Retorna um objeto com code 409 e content com { message: "Product already exists" }', async () => {
-    const resultgetById = await productService.create(fakeData.newProduct);
-    expect(resultgetById.code).to.be.equal(409);
-    expect(resultgetById.content).to.be.deep.equal({ message: 'Product already exists' });
+    const resultCreate = await productService.create(fakeData.newProduct);
+    expect(resultCreate.code).to.be.equal(409);
+    expect(resultCreate.content).to.be.deep.equal({ message: 'Product already exists' });
+  })
+
+})
+
+// ===================== UPDATE CASO ENCONTRE O PRODUTO ===================
+
+describe('Função update em ProductService quando encontra o produto', () => {
+  before(() => {
+    sinon.stub(productModel, 'update').resolves({ id: 4, ...fakeData.newProduct });
+    sinon.stub(search, 'products').resolves(true);
+  })
+
+  after(() => {
+    productModel.update.restore();
+    search.products.restore();
+  })
+
+  it('Retorna um objeto com code 200 e content com o objeto atualizado', async () => {
+    const resultUpdate = await productService.update({ id: 4, ...fakeData.newProduct });
+    expect(resultUpdate.code).to.be.equal(200);
+    expect(resultUpdate.content).to.be.deep.equal({ id: 4, ...fakeData.newProduct });
+  })
+
+})
+
+// ===================== UPDATE CASO NÃO ENCONTRE O PRODUTO ===================
+
+describe('Função update em ProductService quando não encontra o produto', () => {
+  before(() => {
+    sinon.stub(search, 'products').resolves(false);
+  })
+
+  after(() => {
+    search.products.restore();
+  })
+
+  it('Retorna um objeto com code 404 e content com { message: "Product not found" }', async () => {
+    const resultUpdate = await productService.update({ id: 5, ...fakeData.newProduct });
+    expect(resultUpdate.code).to.be.equal(404);
+    expect(resultUpdate.content).to.be.deep.equal({ message: 'Product not found' });
   })
 
 })
