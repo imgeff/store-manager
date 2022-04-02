@@ -75,8 +75,8 @@ describe('Função create em saleModel', () => {
   })
 
   it('Retorna a venda criada', async () => {
-    const resultcreate = await saleModel.create(fakeData.newSale);
-    expect(resultcreate).to.be.deep.equal({ saleId: 3, ...fakeData.newSale });
+    const resultcreate = await saleModel.create([fakeData.newSale]);
+    expect(resultcreate).to.be.deep.equal({ id: 3, itemsSold: [fakeData.newSale] });
   })
 })
 
