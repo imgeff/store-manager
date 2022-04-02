@@ -13,6 +13,11 @@ const getById = async (id) => {
   return { code: 200, content: resultgetById };
 };
 
+const update = async ({ id, productId, quantity }) => {
+  const resultUpdate = await saleModel.update({ id, productId, quantity });
+  return { code: 200, content: resultUpdate };
+};
+
 const exclude = async (id) => {
   const resultSearch = await search.sales(false, id);
   if (!resultSearch) return { code: 404, content: { message: 'Sale not found' } };
@@ -24,5 +29,6 @@ const exclude = async (id) => {
 module.exports = {
   getAll,
   getById,
+  update,
   exclude,
 };
