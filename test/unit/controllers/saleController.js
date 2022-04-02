@@ -77,6 +77,31 @@ describe('Função getById em saleController caso não encontre o produto', () =
 
 })
 
+// ===================== UPDATE ===================
+
+describe('Função update em saleController', () => {
+  before(() => {
+    request.params = { id: 1 };
+    request.body = [{ productId: 1, quantity: 6 }];
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(saleService, 'update').resolves({ code: 200, content: { saleId: 1, itemUpdated: [fakeData.newSale] } });
+  })
+
+  after(() => {
+    saleService.update.restore();
+  })
+
+  it('Retorna uma resposta com status 200 e o produto atualizado', async () => {
+    await saleController.update(request, response);
+    expect(response.status.calledWith(200)).to.be.true;
+    expect(response.json.calledWith({ saleId: 1, itemUpdated: [fakeData.newSale] })).to.be.true;
+  })
+
+})
+
 // ===================== DELETE CASO ENCONTRE A VENDA ===================
 
 describe('Função exclude em saleController caso encontre a venda', () => {
