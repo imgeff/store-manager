@@ -12,6 +12,12 @@ const getById = async (req, res) => {
   return res.status(code).json(content);
 };
 
+const create = async (req, res) => {
+  const { body } = req;
+  const { code, content } = await saleService.create(body);
+  return res.status(code).json(content);
+};
+
 const update = async (req, res) => {
   const { id } = req.params;
   const [{ productId, quantity }] = req.body;
@@ -30,6 +36,7 @@ const exclude = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  create,
   update,
   exclude,
 };
