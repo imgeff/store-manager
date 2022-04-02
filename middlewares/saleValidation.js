@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const requiredValidate = Joi.object({
+  id: Joi.number().required(),
   productId: Joi.number().required(),
   quantity: Joi.number().required(),
 });
@@ -18,8 +19,9 @@ const saleSchema = (fields) => {
 };
 
 const saleValidation = (req, res, next) => {
-  const { name, quantity } = req.body;
-  const resultValidation = saleSchema({ name, quantity });
+  const { id } = req.params;
+  const { productId, quantity } = req.body;
+  const resultValidation = saleSchema({ id, productId, quantity });
   if (resultValidation !== false) {
     return res.status(resultValidation.code).json(resultValidation.content);
   }
