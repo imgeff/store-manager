@@ -15,7 +15,7 @@ const getById = async (req, res) => {
 const update = async (req, res) => {
   const { id } = req.params;
   const [{ productId, quantity }] = req.body;
-  const { code, content } = await saleService.update({ id, productId, quantity });
+  const { code, content } = await saleService.update({ id: Number(id), productId, quantity });
 
   return res.status(code).json(content);
 };
