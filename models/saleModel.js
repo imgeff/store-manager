@@ -34,8 +34,8 @@ const create = async ({ productId, quantity }) => {
 const update = async ({ id, productId, quantity }) => {
   const queryUpdate = `
   UPDATE StoreManager.sales_products
-  SET productId = ?, quantity = ?
-  WHERE id = ?;`;
+  SET product_id = ?, quantity = ?
+  WHERE sale_id = ?;`;
   await connection.execute(queryUpdate, [productId, quantity, id]);
   
   return { saleId: id, itemUpdated: [{ productId, quantity }] };
