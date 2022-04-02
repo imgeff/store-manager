@@ -24,11 +24,24 @@ const getById = async (id) => {
   return productById;
 };
 
-const create = async ({ productId, quantity }) => {
-  const queryCreate = 'INSERT INTO StoreManager.sales_products(product_id, quantity) VALUES(?, ?)';
-  const [{ insertId }] = await connection.execute(queryCreate, [productId, quantity]);
+const create = async (sales) => {
+  // =============== INSERT TABLE SALES ==============
 
-  return { saleId: insertId, productId, quantity };
+  const queryCreateSales = `
+    INSERT INTO StoreManager.sales(date) 
+    VALUES(NOW())`;
+  const [{ insertId }] = await connection.execute(queryCreateSales);
+
+  // =============== INSERT TABLE SALES_PRODUCTS ==============
+  
+  await sales.forEach(async ({ productId, quantity }) => {
+    const queryCreateSalesProducts = `
+    INSERT INTO StoreManager.sales_products(sale_id, product_id, quantity) 
+    VALUES(?, ?, ?)`;
+    await connection.execute(queryCreateSalesProducts, [insertId, productId, quantity]);
+  });
+
+  return { id: insertId, itemsSold: sales };
 };
 
 const update = async ({ id, productId, quantity }) => {
