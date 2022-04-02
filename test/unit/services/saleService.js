@@ -66,6 +66,25 @@ describe('Função getById em saleService caso não encontre o produto', () => {
 
 })
 
+// ===================== CREATE ===================
+
+describe('Função create em saleService', () => {
+  before(() => {
+    sinon.stub(saleModel, 'create').resolves({ id: 3, itemsSold: [fakeData.newSale] });
+  })
+
+  after(() => {
+    saleModel.create.restore()
+  })
+
+  it('Retorna um objeto com code 201 e content com a venda criada', async () => {
+    const resultgetById = await saleService.create([fakeData.newSale]);
+    expect(resultgetById.code).to.be.equal(201);
+    expect(resultgetById.content).to.be.deep.equal({ id: 3, itemsSold: [fakeData.newSale] });
+  })
+
+})
+
 // ===================== UPDATE ===================
 
 describe('Função update em saleService', () => {
