@@ -66,6 +66,25 @@ describe('Função getById em saleService caso não encontre o produto', () => {
 
 })
 
+// ===================== UPDATE ===================
+
+describe('Função update em saleService', () => {
+  before(() => {
+    sinon.stub(saleModel, 'update').resolves({ saleId: 4, itemUpdated: [fakeData.newSale] });
+  })
+
+  after(() => {
+    saleModel.update.restore();
+  })
+
+  it('Retorna um objeto com code 200 e content com o objeto atualizado', async () => {
+    const resultUpdate = await saleService.update({ id: 4, ...fakeData.newSale });
+    expect(resultUpdate.code).to.be.equal(200);
+    expect(resultUpdate.content).to.be.deep.equal({ saleId: 4, itemUpdated: [fakeData.newSale] });
+  })
+
+})
+
 // ===================== DELETE CASO ENCONTRE A VENDA ===================
 
 describe('Função exclude em saleService quando encontra a venda', () => {
