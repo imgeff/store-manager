@@ -12,6 +12,14 @@ const getById = async (req, res) => {
   return res.status(code).json(content);
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const [{ productId, quantity }] = req.body;
+  const { code, content } = await saleService.update({ id, productId, quantity });
+
+  return res.status(code).json(content);
+};
+
 const exclude = async (req, res) => {
   const { id } = req.params;
   const { code, content } = await saleService.exclude(Number(id));
@@ -22,5 +30,6 @@ const exclude = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  update,
   exclude,
 };
