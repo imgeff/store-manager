@@ -77,6 +77,30 @@ describe('Função getById em saleController caso não encontre o produto', () =
 
 })
 
+// ===================== CREATE ===================
+
+describe('Função create em saleController', () => {
+  before(() => {
+    request.body = [{ name: 'produto', quantity: 10 }];
+    response.status = sinon.stub()
+      .returns(response);
+    response.json = sinon.stub()
+      .returns();
+    sinon.stub(saleService, 'create').resolves({ code: 201, content: { id: 4, itemsSold: [fakeData.newSale] } });
+  })
+
+  after(() => {
+    saleService.create.restore();
+  })
+
+  it('Retorna uma resposta com status 201 e a venda criada', async () => {
+    await saleController.create(request, response);
+    expect(response.status.calledWith(201)).to.be.true;
+    expect(response.json.calledWith({ id: 4, itemsSold: [fakeData.newSale] })).to.be.true;
+  })
+
+})
+
 // ===================== UPDATE ===================
 
 describe('Função update em saleController', () => {
