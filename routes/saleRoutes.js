@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAll, getById, exclude } = require('../controllers/saleController');
+const { getAll, getById, update, exclude } = require('../controllers/saleController');
 
 const router = express.Router();
 
@@ -8,6 +8,10 @@ const router = express.Router();
 router.get('/:id', getById);
 
 router.get('/', getAll);
+
+// ============== UPDATE ===================
+
+router.put('/:id', update);
 
 // ============== DELETE ===================
 
