@@ -13,6 +13,11 @@ const getById = async (id) => {
   return { code: 200, content: resultgetById };
 };
 
+const create = async (sales) => {
+  const resultCreate = await saleModel.create(sales);
+  return { code: 201, content: resultCreate };
+};
+
 const update = async ({ id, productId, quantity }) => {
   const resultUpdate = await saleModel.update({ id, productId, quantity });
   return { code: 200, content: resultUpdate };
@@ -30,5 +35,6 @@ module.exports = {
   getAll,
   getById,
   update,
+  create,
   exclude,
 };
