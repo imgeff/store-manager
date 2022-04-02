@@ -80,6 +80,24 @@ describe('Função create em saleModel', () => {
   })
 })
 
+// ===================== UPDATE ===================
+
+describe('Função update em saleModel', () => {
+  before(() => {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 0 }]);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  })
+
+  it('Retorna a venda atualizada', async () => {
+    const resultUpdate = await saleModel.update({ id: 4, ...fakeData.newSale });
+    expect(resultUpdate).to.be.deep.equal({ saleId: 4, itemUpdated: [fakeData.newSale] });
+  })
+
+})
+
 // ===================== DELETE ===================
 
 describe('Função delete em saleModel', () => {
