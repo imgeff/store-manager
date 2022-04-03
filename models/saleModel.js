@@ -41,16 +41,27 @@ const create = async (sales) => {
     await connection.execute(queryCreateSalesProducts, [insertId, productId, quantity]);
   });
 
+  // =============== UPDATE QUANTITY TABLE PRODUCTS ==============
+  await sales.forEach(async ({ productId, quantity }) => {
+    const queryUpdateQuantity = `
+    UPDATE StoreManager.products 
+    SET quantity = quantity - ?
+    WHERE id = ?;`;
+    await connection.execute(queryUpdateQuantity, [quantity, productId]);
+  });
+
   return { id: insertId, itemsSold: sales };
 };
 
 const update = async ({ id, productId, quantity }) => {
+  // =============== UPDATE TABLE PRODUCTS ==============
   const queryUpdateProduct = `
   UPDATE StoreManager.products
   SET quantity = ?
   WHERE id = ?;`;
   await connection.execute(queryUpdateProduct, [quantity, productId]);
 
+  // =============== UPDATE TABLE SALES PRODUCTS ==============
   const queryUpdateSalesProducts = `
   UPDATE StoreManager.sales_products
   SET product_id = ?, quantity = ?
