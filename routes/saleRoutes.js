@@ -1,5 +1,7 @@
 const express = require('express');
 const { getAll, getById, create, update, exclude } = require('../controllers/saleController');
+// const { saleValidation } = require('../middlewares/saleValidation');
+const validationSale = require('../middlewares/validationSale');
 
 const router = express.Router();
 
@@ -11,11 +13,11 @@ router.get('/', getAll);
 
 // ============== POST ===================
 
-router.post('/', create);
+router.post('/', validationSale, create);
 
 // ============== UPDATE ===================
 
-router.put('/:id', update);
+router.put('/:id', validationSale, update);
 
 // ============== DELETE ===================
 
