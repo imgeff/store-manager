@@ -3,6 +3,7 @@ const {
   GetById,
   UpdateQuantity,
   SumQuantity,
+  SubtractQuantity,
 } = require('./querys');
 
 // ================================ GET BY ID INVENTORY  ==================================
@@ -14,33 +15,43 @@ const getById = async (id) => {
 // ================================ CALCULATE QUANTITY INVENTORY  ==================================
 const calculate = async (id, newProducts) => {
   const oldProducts = await getById(id);
+  const updateCalls = [];
   for (let index = 0; index < newProducts.length; index += 1) {
     const newQuantity = newProducts[index].quantity;
     const { productId } = newProducts[index];
     const oldQuantity = oldProducts[index].quantity;
     if (newQuantity > oldQuantity) {
-      connection.execute(UpdateQuantity, [newQuantity, productId]);
+      const subtractQuantity = connection.execute(UpdateQuantity, [newQuantity, productId]);
+      updateCalls.push(subtractQuantity);
     } 
     if (newQuantity < oldQuantity) {
       const diference = oldQuantity - newQuantity;
-      connection.execute(UpdateQuantity, [diference, productId]);
+      const sumQuantity = connection.execute(UpdateQuantity, [diference, productId]);
+      updateCalls.push(sumQuantity);
     }
   }
+  await Promise.all(updateCalls);
 };
 
 // ================================ SUM QUANTITY INVENTORY  ==================================
 const sum = async (id) => {
   const sales = await getById(id);
+  const sumCalls = [];
   await sales.forEach(async ({ productId, quantity }) => {
-    await connection.execute(SumQuantity, [quantity, productId]);
+    const sumProducts = connection.execute(SumQuantity, [quantity, productId]);
+    sumCalls.push(sumProducts); 
   });
+  await Promise.all(sumCalls);
 };
 
 // ================================ SUBTRACT QUANTITY INVENTORY  ==================================
 const subtract = async (sales) => {
+  const subtractCalls = [];
   await sales.forEach(async ({ productId, quantity }) => {
-    await connection.execute(SumQuantity, [quantity, productId]);
+    const subtractProducts = connection.execute(SubtractQuantity, [quantity, productId]);
+    subtractCalls.push(subtractProducts);
   });
+  await Promise.all(subtractCalls);
 };
 
 module.exports = {
