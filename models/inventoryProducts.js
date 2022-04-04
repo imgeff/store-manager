@@ -1,58 +1,45 @@
 const connection = require('./connection');
+const { 
+  GetById,
+  UpdateQuantity,
+  SumQuantity,
+} = require('./querys');
 
 // ================================ GET BY ID INVENTORY  ==================================
 const getById = async (id) => {
-  const queryGetById = `
-  SELECT SP.product_id AS productId, SP.quantity, S.date
-  FROM StoreManager.sales_products SP
-  INNER JOIN StoreManager.sales S
-  ON S.id = SP.sale_id
-  WHERE SP.sale_id = ?
-  ORDER BY SP.sale_id, SP.product_id;`;
-  const [productById] = await connection.execute(queryGetById, [id]);
+  const [productById] = await connection.execute(GetById, [id]);
   return productById;
 };
 
 // ================================ CALCULATE QUANTITY INVENTORY  ==================================
-const calculate = async (id, productId, quantity) => {
-  const [sale] = await getById(id);
-  if (quantity > sale.quantity) {
-    const queryUpdateQuantity = `
-    UPDATE StoreManager.products 
-    SET quantity = quantity - ?
-    WHERE id = ?;`;
-    await connection.execute(queryUpdateQuantity, [quantity, productId]);
-  } 
-  if (quantity < sale.quantity) {
-    const diference = sale.quantity - quantity;
-    const queryUpdateQuantity = `
-    UPDATE StoreManager.products 
-    SET quantity = quantity + ?
-    WHERE id = ?;`;
-    await connection.execute(queryUpdateQuantity, [diference, productId]);
+const calculate = async (id, newProducts) => {
+  const oldProducts = await getById(id);
+  for (let index = 0; index < newProducts.length; index += 1) {
+    const newQuantity = newProducts[index].quantity;
+    const { productId } = newProducts[index];
+    const oldQuantity = oldProducts[index].quantity;
+    if (newQuantity > oldQuantity) {
+      connection.execute(UpdateQuantity, [newQuantity, productId]);
+    } 
+    if (newQuantity < oldQuantity) {
+      const diference = oldQuantity - newQuantity;
+      connection.execute(UpdateQuantity, [diference, productId]);
+    }
   }
 };
 
 // ================================ SUM QUANTITY INVENTORY  ==================================
 const sum = async (id) => {
   const sales = await getById(id);
-  const querySumQuantity = `
-  UPDATE StoreManager.products 
-  SET quantity = quantity + ?
-  WHERE id = ?;`;
   await sales.forEach(async ({ productId, quantity }) => {
-    await connection.execute(querySumQuantity, [quantity, productId]);
+    await connection.execute(SumQuantity, [quantity, productId]);
   });
 };
 
 // ================================ SUBTRACT QUANTITY INVENTORY  ==================================
 const subtract = async (sales) => {
-  const querySumQuantity = `
-  UPDATE StoreManager.products 
-  SET quantity = quantity - ?
-  WHERE id = ?;`;
   await sales.forEach(async ({ productId, quantity }) => {
-    await connection.execute(querySumQuantity, [quantity, productId]);
+    await connection.execute(SumQuantity, [quantity, productId]);
   });
 };
 
