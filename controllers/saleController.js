@@ -36,8 +36,8 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {  
     const { id } = req.params;
-    const [{ productId, quantity }] = req.body;
-    const { code, content } = await saleService.update({ id: Number(id), productId, quantity });
+    const { body } = req;
+    const { code, content } = await saleService.update({ id: Number(id), products: body });
   
     return res.status(code).json(content);
   } catch (error) {

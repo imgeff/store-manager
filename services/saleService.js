@@ -18,8 +18,8 @@ const create = async (sales) => {
   return { code: 201, content: resultCreate };
 };
 
-const update = async ({ id, productId, quantity }) => {
-  const resultUpdate = await saleModel.update({ id, productId, quantity });
+const update = async (sale) => {
+  const resultUpdate = await saleModel.update(sale);
   return { code: 200, content: resultUpdate };
 };
 
