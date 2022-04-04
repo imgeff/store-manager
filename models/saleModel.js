@@ -17,8 +17,8 @@ const getAll = async () => {
 
 // ================================ GET BY ID  ==================================
 const getById = async (id) => {
-  const [productById] = await connection.execute(GetById, [id]);
-  return productById;
+  const [saleById] = await connection.execute(GetById, [id]);
+  return saleById;
 };
 
 // ================================ CREATE  ==================================
@@ -28,9 +28,12 @@ const create = async (sales) => {
   // =============== INSERT TABLE SALES ==============
     const [{ insertId }] = await connection.execute(CreateSales);
   // =============== INSERT TABLE SALES_PRODUCTS ==============
+  const createCalls = [];
     await sales.forEach(async ({ productId, quantity }) => {
-      await connection.execute(CreateSalesProducts, [insertId, productId, quantity]);
+      const createSales = connection.execute(CreateSalesProducts, [insertId, productId, quantity]);
+      createCalls.push(createSales);
     });
+    await Promise.all(createCalls);
     return { id: insertId, itemsSold: sales };
 };
 
@@ -41,7 +44,8 @@ const update = async ({ id, products }) => {
   // =============== SALES PRODUCTS ==============
   const updateCalls = [];
   await products.forEach(async ({ productId, quantity }) => {
-    updateCalls.push(connection.execute(UpdateSalesProducts, [productId, quantity, id]));
+    const updateSale = connection.execute(UpdateSalesProducts, [productId, quantity, id]);
+    updateCalls.push(updateSale);
   });
     await Promise.all(updateCalls);
     return { saleId: id, itemUpdated: products };
