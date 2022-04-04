@@ -40,6 +40,11 @@ const SumQuantity = `
   SET quantity = quantity + ?
   WHERE id = ?;`;
 
+const SubtractQuantity = `
+UPDATE StoreManager.products 
+SET quantity = quantity - ?
+WHERE id = ?;`;
+
 module.exports = {
   GetAll,
   GetById,
@@ -49,4 +54,5 @@ module.exports = {
   Delete,
   UpdateQuantity,
   SumQuantity,
+  SubtractQuantity,
 };
