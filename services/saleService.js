@@ -1,4 +1,5 @@
 const saleModel = require('../models/saleModel');
+const { validateQuantity } = require('../models/inventoryProducts');
 const search = require('../helpers/search');
 const { notFound } = require('../data/errorMessage');
 
@@ -14,6 +15,9 @@ const getById = async (id) => {
 };
 
 const create = async (sales) => {
+  const resultValidateQuantity = await validateQuantity(sales);
+  const saleDenied = { code: 422, content: { message: 'Such amount is not permitted to sell' } };
+  if (resultValidateQuantity === false) return saleDenied;
   const resultCreate = await saleModel.create(sales);
   return { code: 201, content: resultCreate };
 };
