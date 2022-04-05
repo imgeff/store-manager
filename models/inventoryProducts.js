@@ -1,4 +1,5 @@
 const connection = require('./connection');
+const productModel = require('./productModel');
 const { 
   GetById,
   UpdateQuantity,
@@ -54,8 +55,25 @@ const subtract = async (sales) => {
   await Promise.all(subtractCalls);
 };
 
+const validateQuantity = async (sales) => {
+  const productCalls = [];
+  sales.forEach(({ productId }) => {
+    const product = productModel.getById(productId);
+    productCalls.push(product);
+  });
+  const products = await Promise.all(productCalls);
+  const resultValidateQuantity = sales.map((saleProduct, index) => {
+    const inventoryProductQuantity = products[index].quantity;
+    if (saleProduct.quantity > inventoryProductQuantity) return false;
+    return true;
+  });
+
+  return resultValidateQuantity[0];
+};
+
 module.exports = {
   calculate,
   subtract,
   sum,
+  validateQuantity,
 };
