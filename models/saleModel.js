@@ -1,23 +1,23 @@
 const connection = require('./connection');
 const { calculate, subtract, sum } = require('./inventoryProducts');
 const { 
-  GetAll, 
-  GetById, 
+  GetAllSales, 
+  GetByIdSale, 
   CreateSales, 
   CreateSalesProducts,
   UpdateSalesProducts,
-  Delete,
+  DeleteSale,
 } = require('./querys');
 
 // ================================ GET ALL  ==================================
 const getAll = async () => {
-  const [allSales] = await connection.execute(GetAll);
+  const [allSales] = await connection.execute(GetAllSales);
   return allSales;
 };
 
 // ================================ GET BY ID  ==================================
 const getById = async (id) => {
-  const [saleById] = await connection.execute(GetById, [id]);
+  const [saleById] = await connection.execute(GetByIdSale, [id]);
   return saleById;
 };
 
@@ -56,7 +56,7 @@ const exclude = async (id) => {
   // =============== SUM QUANTITY PRODUCTS ==============
     await sum(id);
   // =============== DELETE SALE TABLE SALES ==============
-    await connection.execute(Delete, [id]);
+    await connection.execute(DeleteSale, [id]);
 };
 
 module.exports = {
