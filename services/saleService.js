@@ -17,7 +17,7 @@ const getById = async (id) => {
 const create = async (sales) => {
   const resultValidateQuantity = await validateQuantity(sales);
   const saleDenied = { code: 422, content: { message: 'Such amount is not permitted to sell' } };
-  if (resultValidateQuantity === false) return saleDenied;
+  if (!resultValidateQuantity) return saleDenied;
   const resultCreate = await saleModel.create(sales);
   return { code: 201, content: resultCreate };
 };
