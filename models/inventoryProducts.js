@@ -1,7 +1,7 @@
 const connection = require('./connection');
 const productModel = require('./productModel');
 const { 
-  GetById,
+  GetByIdSale,
   UpdateQuantity,
   SumQuantity,
   SubtractQuantity,
@@ -9,7 +9,7 @@ const {
 
 // ================================ GET BY ID INVENTORY  ==================================
 const getById = async (id) => {
-  const [productById] = await connection.execute(GetById, [id]);
+  const [productById] = await connection.execute(GetByIdSale, [id]);
   return productById;
 };
 
