@@ -381,9 +381,11 @@ Se a venda passada por parâmetro **NÃO** existir, a resposta terá a seguinte 
   * Entre na pasta do repositório que você acabou de clonar:
     * `cd store-manager`
 
-2. Instale as dependências e inicialize o projeto
-  * Instale as dependências:
+2. Instale as dependências:
     * `npm install`
+3. Configure sua conexão com o Banco de Dados e Inicialize o Projeto
+  * Edite o arquivo `connection.js` da pasta `models`
+    * Substitua o código `process.env.VALOR_DA_PROPRIEDADE` pelas configurações do seu banco de dados local
   * Inicialize o servidor:
     * `npm start`
 
