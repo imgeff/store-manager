@@ -14,6 +14,11 @@ const getById = async (id) => {
 };
 
 // ================================ CALCULATE QUANTITY INVENTORY  ==================================
+const executeQuery = (query, quantity, productId) => {
+  const execution = connection.execute(query, [quantity, productId]);
+  return execution;
+};
+
 const calculate = async (id, newProducts) => {
   const oldProducts = await getById(id);
   const updateCalls = [];
@@ -22,12 +27,12 @@ const calculate = async (id, newProducts) => {
     const { productId } = newProducts[index];
     const oldQuantity = oldProducts[index].quantity;
     if (newQuantity > oldQuantity) {
-      const subtractQuantity = connection.execute(UpdateQuantity, [newQuantity, productId]);
+      const subtractQuantity = executeQuery(UpdateQuantity, newQuantity, productId);
       updateCalls.push(subtractQuantity);
     } 
     if (newQuantity < oldQuantity) {
       const diference = oldQuantity - newQuantity;
-      const sumQuantity = connection.execute(UpdateQuantity, [diference, productId]);
+      const sumQuantity = executeQuery(UpdateQuantity, diference, productId);
       updateCalls.push(sumQuantity);
     }
   }
