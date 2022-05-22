@@ -389,6 +389,9 @@ Se a venda passada por parâmetro **NÃO** existir, a resposta terá a seguinte 
   * Inicialize o servidor:
     * `npm start`
 
+4. (**Opcional**)  Executando os Testes:
+    * `npm run test:mocha`
+
 
     
 ## Stack utilizada
