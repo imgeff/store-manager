@@ -1,6 +1,5 @@
 
 # Store Manager
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 
 A API Restful Store Manager trata-se de um sistema de gerenciamento de vendas, onde é possível criar, visualizar, deletar e atualizar produtos e vendas.
 
@@ -394,7 +393,7 @@ Se a venda passada por parâmetro **NÃO** existir, a resposta terá a seguinte 
 
 
     
-## Stack utilizada
+## Tecnologias utilizada
 
 **Back-end:** Node.js, Express
 
